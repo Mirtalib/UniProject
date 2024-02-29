@@ -2,7 +2,7 @@
 using Application.Models.DTOs.LessonDTOs;
 using Application.Models.DTOs.StudentDTOs;
 using Application.Repositories;
-using Application.Services.UserService;
+using Application.Services.IUserService;
 using Domain.Models;
 using Persistence.Context;
 

@@ -6,7 +6,7 @@ using Application.Models.DTOs.StudentDTOs;
 using Application.Models.DTOs.TecherDTOs;
 using Application.Models.DTOs.UniversityDTOs;
 using Application.Repositories;
-using Application.Services.UserService;
+using Application.Services.IUserService;
 using Domain.Models;
 
 
@@ -30,7 +30,7 @@ public class AdminService : IAdminService
     {
         var universityes = await unitOfWork.ReadUniversityRepository.GetAsync(uni => universityDto.Name.ToLower() == uni.Name.ToLower());
         if (universityes is not null)
-            throw new NullReferenceException("There is a University with this name, choose another name");
+            throw new ArgumentNullException("There is a University with this name, choose another name");
 
 
         var university = new University
@@ -80,7 +80,7 @@ public class AdminService : IAdminService
         var selectUni = await unitOfWork.ReadUniversityRepository.GetAsync(uni => uni.Id == Id);
 
         if (selectUni is null)
-            throw new NullReferenceException("There is no such university");
+            throw new ArgumentNullException("There is no such university");
 
         var facultiesname = new List<string>();
         foreach (var id in selectUni.FacultyIds)
@@ -106,7 +106,7 @@ public class AdminService : IAdminService
         var university = await unitOfWork.ReadUniversityRepository.GetAsync(uni => uni.Id == updateUniversity.Id);
 
         if (university is null)
-            throw new NullReferenceException("There is no such university");
+            throw new ArgumentNullException("There is no such university");
 
         university.Name = updateUniversity.Name;
 
@@ -124,7 +124,7 @@ public class AdminService : IAdminService
             .GetAsync(uni => uni.Id == removeUniversity.Id);
 
         if (university is null)
-            throw new NullReferenceException("There is no such university");
+            throw new ArgumentNullException("There is no such university");
 
         await RemoveAllFacultyFromUniverstyId(university.Id);
 
@@ -144,13 +144,13 @@ public class AdminService : IAdminService
         var faculties = await unitOfWork.ReadFacultyRepository.GetAsync(faculty => facultyDto.Name.ToLower() == faculty.Name.ToLower());
 
         if (faculties != null)
-            throw new NullReferenceException("There is a Faculty with this name, choose another name");
+            throw new ArgumentNullException("There is a Faculty with this name, choose another name");
 
 
         var university = await unitOfWork.ReadUniversityRepository.GetAsync(uni => uni.Id == facultyDto.UniId);
 
         if (university == null)
-            throw new NullReferenceException("There is no such university");
+            throw new ArgumentNullException("There is no such university");
 
 
         var faculty = new Faculty
@@ -178,7 +178,7 @@ public class AdminService : IAdminService
     {
         var university = await unitOfWork.ReadUniversityRepository.GetAsync(uni=> uni.Id == Id);
         if (university is null)
-            throw new NullReferenceException("There is no such university");
+            throw new ArgumentNullException("There is no such university");
         
 
         List<ViewFacultyDto> faculties = new();
@@ -197,7 +197,7 @@ public class AdminService : IAdminService
 
         var selectfaculty = await unitOfWork.ReadFacultyRepository.GetAsync(fac => fac.Id == Id);
         if (selectfaculty is null)
-            throw new NullReferenceException("There is no such faculty");
+            throw new ArgumentNullException("There is no such faculty");
 
         var faculty = new ViewFacultyDto
         {
@@ -221,7 +221,7 @@ public class AdminService : IAdminService
         var faculty = await unitOfWork.ReadFacultyRepository.GetAsync(fac => fac.Id == updateFaculty.Id);
 
         if (faculty is null)
-            throw new NullReferenceException("There is no such faculty");
+            throw new ArgumentNullException("There is no such faculty");
 
         faculty.UniversityId = updateFaculty.UniversityId;
         faculty.Name = updateFaculty.Name;
@@ -237,7 +237,7 @@ public class AdminService : IAdminService
         var faculty = await unitOfWork.ReadFacultyRepository.GetAsync(fac => fac.Id == facultyDto.Id);
 
         if (faculty is null)
-            throw new NullReferenceException("There is no such faculty");
+            throw new ArgumentNullException("There is no such faculty");
 
         await RemoveAllSpecialtyFromFacultyId(faculty.Id);
         unitOfWork.WriteFacultyRepository.Remove(faculty);
@@ -251,12 +251,12 @@ public class AdminService : IAdminService
 
         var universty = await unitOfWork.ReadUniversityRepository.GetAsync(uni => uni.Id == Id);
         if (universty is null)
-            throw new NullReferenceException("There is no such university");
+            throw new ArgumentNullException("There is no such university");
 
         var facultes = unitOfWork.ReadFacultyRepository.GetWhere(faculty => faculty.UniversityId == universty.Id);
 
         if (facultes is null)
-            throw new NullReferenceException("There is no faculty within the university");
+            throw new ArgumentNullException("There is no faculty within the university");
 
         foreach (var faculty in facultes)
         {
@@ -270,23 +270,27 @@ public class AdminService : IAdminService
         return true;
     }
 
+
     #endregion
 
 
+
     #region Specialty Function
+
+
     public async Task<bool> CreateSpecialty(CreateSpecialtyDto specialtyDto)
     {
 
         var specialties = await unitOfWork.ReadSpecialtyRepository.GetAsync(faculty => specialtyDto.Name.ToLower() == faculty.Name.ToLower());
 
         if (specialties != null)
-            throw new NullReferenceException("There is a  Specialty with this name, choose another name");
+            throw new ArgumentNullException("There is a  Specialty with this name, choose another name");
 
 
         var faculty = await unitOfWork.ReadFacultyRepository.GetAsync(faculty => specialtyDto.FacultyId == faculty.Id);
 
         if (faculty == null)
-            throw new NullReferenceException("There is no such faculty");
+            throw new ArgumentNullException("There is no such faculty");
 
 
 
@@ -314,7 +318,7 @@ public class AdminService : IAdminService
         var specialty = await unitOfWork.ReadSpecialtyRepository.GetAsync(spec => spec.Id == specialtyDto.Id);
 
         if (specialty == null)
-            throw new NullReferenceException("There is no such specialty");
+            throw new ArgumentNullException("There is no such specialty");
 
 
         specialty.Name = specialtyDto.Name;
@@ -331,7 +335,7 @@ public class AdminService : IAdminService
         var specialty = await unitOfWork.ReadSpecialtyRepository.GetAsync(spec => spec.Id == specialtyDto.Id);
 
         if (specialty == null)
-            throw new NullReferenceException("There is no such specialty");
+            throw new ArgumentNullException("There is no such specialty");
         unitOfWork.WriteSpecialtyRepository.Remove(specialty);
         await unitOfWork.WriteSpecialtyRepository.SaveChangesAsync();
 
@@ -342,7 +346,7 @@ public class AdminService : IAdminService
     {
         var faculty = await unitOfWork.ReadFacultyRepository.GetAsync(fac => fac.Id == Id);
         if (faculty is null)
-            throw new NullReferenceException();
+            throw new ArgumentNullException();
 
         var specialty = unitOfWork.ReadSpecialtyRepository.GetWhere(x => x.FacultyId == faculty.Id);
 
@@ -365,7 +369,7 @@ public class AdminService : IAdminService
         var faculty = await unitOfWork.ReadFacultyRepository.GetAsync(faculty => Id == faculty.Id);
 
         if (faculty == null)
-            throw new NullReferenceException("There is no such faculty");
+            throw new ArgumentNullException("There is no such faculty");
 
         var specialtyes = new List<ViewSpecialtyDto>();
         foreach (var item in unitOfWork.ReadSpecialtyRepository.GetWhere(specialty=>specialty.FacultyId == Id))
@@ -382,7 +386,7 @@ public class AdminService : IAdminService
 
         var specialty = await unitOfWork.ReadSpecialtyRepository.GetAsync(spec => spec.Id == Id);
         if (specialty is null)
-            throw new NullReferenceException("There is no such specialty");
+            throw new ArgumentNullException("There is no such specialty");
         var specialtyDto = new ViewSpecialtyDto();
 
         specialtyDto.Id = specialty.Id;
@@ -411,13 +415,13 @@ public class AdminService : IAdminService
     {
 
         if (await unitOfWork.ReadGroupRepository.GetAsync(group => group.Name == groupDto.Name) != null)
-            throw new NullReferenceException("There is a Group with this name, choose another name");
+            throw new ArgumentNullException("There is a Group with this name, choose another name");
 
 
         var specialty = await unitOfWork.ReadSpecialtyRepository.GetAsync(specialty => specialty.Id == groupDto.SpecialtyId);
 
         if (specialty == null)
-            throw new NullReferenceException("There is no such specialty");
+            throw new ArgumentNullException("There is no such specialty");
 
         DateTime firstDate = DateTime.Now;
 
@@ -445,7 +449,7 @@ public class AdminService : IAdminService
     {
         var group = await unitOfWork.ReadGroupRepository.GetAsync(group=> group.Id == groupDto.Id);
         if (group == null) 
-            throw new NullReferenceException("There is no such group");
+            throw new ArgumentNullException("There is no such group");
 
         group.Name = groupDto.Name;
         group.SpecialtyId = groupDto.SpecialtyId;
@@ -461,7 +465,7 @@ public class AdminService : IAdminService
     {
         var group = await unitOfWork.ReadGroupRepository.GetAsync(group=> group.Id == groupDto.Id);
         if (group == null)
-            throw new NullReferenceException("There is no such group");
+            throw new ArgumentNullException("There is no such group");
 
         unitOfWork.WriteGroupRepository.Remove(group);
         await unitOfWork.WriteGroupRepository.SaveChangesAsync();
@@ -473,7 +477,7 @@ public class AdminService : IAdminService
     {
         var specialty = await unitOfWork.ReadSpecialtyRepository.GetAsync(x => x.Id == Id);
         if (specialty is null)
-            throw new NullReferenceException("There is no such specialty");
+            throw new ArgumentNullException("There is no such specialty");
 
         var group = unitOfWork.ReadGroupRepository.GetWhere(x => x.SpecialtyId == specialty.Id);
 
@@ -492,7 +496,7 @@ public class AdminService : IAdminService
         var group = await unitOfWork.ReadGroupRepository.GetAsync(Id);
 
         if (group is null)
-            throw new NullReferenceException("There is no such group");
+            throw new ArgumentNullException("There is no such group");
 
         var groupDto = new ViewGroupDto();
         
@@ -514,7 +518,7 @@ public class AdminService : IAdminService
     {
         var specialty = await unitOfWork.ReadSpecialtyRepository.GetAsync(x => x.Id == Id);
         if (specialty is null)
-            throw new NullReferenceException("There is no such specialty");
+            throw new ArgumentNullException("There is no such specialty");
 
         var groups = new List<ViewGroupDto>();
 
@@ -544,7 +548,7 @@ public class AdminService : IAdminService
     {
         var group = await unitOfWork.ReadGroupRepository.GetAsync(studentDto.GroupId);
         if (group is null)
-            throw new NullReferenceException("There is no such group");
+            throw new ArgumentNullException("There is no such group");
 
         var student = new Student
         {
@@ -578,11 +582,11 @@ public class AdminService : IAdminService
     public async Task<bool> CreateDepartment(CreateDepartmentDto departmentDto)
     {
         if (await unitOfWork.ReadDepartmentRepository.GetAsync(department => departmentDto.Name.ToLower() == department.Name.ToLower()) != null)
-            throw new NullReferenceException("There is a Department with this name, choose another name");
+            throw new ArgumentNullException("There is a Department with this name, choose another name");
 
         var university = await unitOfWork.ReadUniversityRepository.GetAsync(uni => uni.Id == departmentDto.UniversityId);
         if (university == null)
-            throw new NullReferenceException("There is no such university");
+            throw new ArgumentNullException("There is no such university");
 
 
         var department = new Department
@@ -610,7 +614,7 @@ public class AdminService : IAdminService
         var department = await unitOfWork.ReadDepartmentRepository.GetAsync(x=> x.Id == departmentDto.Id);
 
         if (department is null)
-            throw new NullReferenceException("There is no such department");
+            throw new ArgumentNullException("There is no such department");
 
         unitOfWork.WriteDepartmentRepository.Remove(department);
         await unitOfWork.WriteDepartmentRepository.SaveChangesAsync();
@@ -622,7 +626,7 @@ public class AdminService : IAdminService
     {
         var department = await unitOfWork.ReadDepartmentRepository.GetAsync(x => x.Id == departmentDto.Id);
         if (department is null)
-            throw new NullReferenceException("There is no such department");
+            throw new ArgumentNullException("There is no such department");
 
         department.Name = departmentDto.Name;
         department.CreateDate = departmentDto.CreateDate;
@@ -638,11 +642,11 @@ public class AdminService : IAdminService
     {
         var university = await unitOfWork.ReadUniversityRepository.GetAsync(uni => uni.Id == Id);
         if (university is null)
-            throw new NullReferenceException("There is no such university");
+            throw new ArgumentNullException("There is no such university");
 
         var departments = unitOfWork.ReadDepartmentRepository.GetWhere(x => x.UniversityId == Id);
         if (departments is null)
-            throw new NullReferenceException("There is no such department");
+            throw new ArgumentNullException("There is no such department");
 
         var departmentDtos = new List<ViewDepartmentDto>();
         foreach (var item in departments)
@@ -658,7 +662,7 @@ public class AdminService : IAdminService
     {
         var department = await unitOfWork.ReadDepartmentRepository.GetAsync(x=> x.Id == Id);
         if (department is null)
-            throw new NullReferenceException("There is no such department");
+            throw new ArgumentNullException("There is no such department");
 
         var departmentDto = new ViewDepartmentDto();
         departmentDto.Id = department.Id;
@@ -682,12 +686,12 @@ public class AdminService : IAdminService
         var uni = await unitOfWork.ReadUniversityRepository.GetAsync(x=>x.Id == Id);
 
         if (uni is null)
-           throw new NullReferenceException("There is no such university");
+           throw new ArgumentNullException("There is no such university");
 
         var departments = unitOfWork.ReadDepartmentRepository.GetWhere(x => x.UniversityId == uni.Id);
 
         if (departments is null)
-            throw new NullReferenceException("There is no such department");
+            throw new ArgumentNullException("There is no such department");
 
         foreach (var item in departments)
         {
@@ -707,7 +711,7 @@ public class AdminService : IAdminService
     {
         var department = await unitOfWork.ReadDepartmentRepository.GetAsync(teacherDto.DepartmentId);
         if (department is null)
-            throw new NullReferenceException("There is no such department");
+            throw new ArgumentNullException("There is no such department");
 
         var teacher = new Teacher
         {

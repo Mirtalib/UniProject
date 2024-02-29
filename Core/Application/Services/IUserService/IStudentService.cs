@@ -3,7 +3,7 @@ using Application.Models.DTOs.LessonDTOs;
 using Application.Models.DTOs.StudentDTOs;
 using Domain.Models;
 
-namespace Application.Services.UserService;
+namespace Application.Services.IUserService;
 
 public interface IStudentService
 {

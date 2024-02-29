@@ -7,7 +7,7 @@ using Application.Models.DTOs.TecherDTOs;
 using Application.Models.DTOs.UniversityDTOs;
 using Domain.Models;
 
-namespace Application.Services.UserService;
+namespace Application.Services.IUserService;
 
 public interface IAdminService
 {

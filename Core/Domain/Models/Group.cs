@@ -9,5 +9,5 @@ public class Group : Entity
     public DateTime EndTime { get; set; }
     public string SpecialtyId { get; set; }
     public List<string> StudentIds { get; set; } = new List<string>();
+    public List<string> LessonIds { get; set; } = new List<string>();
 }
-

@@ -1,9 +1,4 @@
-using Application.Models.Config;
-using Application.Services;
-using Infrastructure.Services;
-using Microsoft.EntityFrameworkCore;
-using Persistence.Context;
-using System;
+using Serilog;
 using WebApi.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +12,11 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddContext(builder.Configuration);
 builder.Services.AddServices();
 builder.Services.AddRepositories();
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .WriteTo.Console()
+    .WriteTo.File("logs/ApplicationLog-.txt", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
 
 
 var app = builder.Build();  

@@ -4,7 +4,7 @@ using Application.Models.DTOs.LessonDTOs;
 using Application.Models.DTOs.TecherDTOs;
 using Application.Models.DTOs.UniversityDTOs;
 
-namespace Application.Services.UserService;
+namespace Application.Services.IUserService;
 
 public interface ITeacherService
 {

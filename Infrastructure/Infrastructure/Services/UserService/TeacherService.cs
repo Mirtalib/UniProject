@@ -3,7 +3,7 @@ using Application.Models.DTOs.GroupDTOs;
 using Application.Models.DTOs.LessonDTOs;
 using Application.Models.DTOs.TecherDTOs;
 using Application.Repositories;
-using Application.Services.UserService;
+using Application.Services.IUserService;
 using Persistence.Repositories;
 using System.Runtime.CompilerServices;
 

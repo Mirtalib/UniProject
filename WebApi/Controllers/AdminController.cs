@@ -6,8 +6,9 @@ using Application.Models.DTOs.DepartmentDTOs;
 using Application.Models.DTOs.SpecialtyDTOs;
 using Application.Models.DTOs.StudentDTOs;
 using Application.Models.DTOs.TecherDTOs;
-using Application.Services.UserService;
+using Application.Services.IUserService;
 using Domain.Models;
+using Serilog;
 
 namespace WebApi.Controllers;
 
@@ -41,6 +42,7 @@ public class AdminController : ControllerBase
         }
         catch (Exception ex)
         {
+            Log.Error("error occured on [POST] Create University");
             return BadRequest(ex.Message);
         }
     }
@@ -57,6 +59,7 @@ public class AdminController : ControllerBase
         }
         catch (Exception ex)
         {
+            Log.Error("error occured on [GET]  viewAllUniversity");
             return BadRequest(ex.Message);
         }
     }
@@ -73,6 +76,7 @@ public class AdminController : ControllerBase
         }
         catch (Exception ex)
         {
+            Log.Error("error occured on [GET] Create getUniversityId");
             return BadRequest(ex.Message);
         }
     }
@@ -88,6 +92,7 @@ public class AdminController : ControllerBase
         }
         catch (Exception ex)
         {
+            Log.Error("error occured on [POST]  updateUniversity");
             return BadRequest(ex.Message);
         }
     }
@@ -103,6 +108,7 @@ public class AdminController : ControllerBase
         }
         catch (Exception ex)
         {
+            Log.Error("error occured on [DLETE]  removeUniversity");
             return BadRequest(ex.Message);
         }
     }

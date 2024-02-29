@@ -9,7 +9,7 @@ using Application.Repositories.ISpecialtyRepository;
 using Application.Repositories.IStudentRepository;
 using Application.Repositories.ITeacherRepository;
 using Application.Repositories.IUniversityRepository;
-using Application.Services.UserService;
+using Application.Services.IUserService;
 using Infrastructure.Services;
 using Infrastructure.Services.UserService;
 using Microsoft.EntityFrameworkCore;

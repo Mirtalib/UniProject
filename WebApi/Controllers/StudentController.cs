@@ -1,4 +1,4 @@
-﻿using Application.Services.UserService;
+﻿using Application.Services.IUserService;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
